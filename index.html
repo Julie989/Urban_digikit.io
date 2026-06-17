@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Urban Digikit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js" async defer></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      iframe {
+        width: 100%;
+        height: 100vh;
+        border: none;
+        display: block;
+        font-family: "Montserrat", sans-serif;
+      }
+      header {
+        font-size: 1.2rem;
+        padding: 10px;
+        left: auto;
+      }
+      a,
+      div,
+      button {
+        display: inline-block;
+      }
+      a, button {
+        font-family: "Montserrat", sans-serif;
+        color: black;
+      }
+      button {
+        padding: 5px;
+        font-size: 1.1rem;
+        color: white;
+        background-color: #acc4eb;
+        border: none;
+      }
+      #arrow_down {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <header>
+    <a
+      href="https://docs.google.com/spreadsheets/d/1UCDoY3J_L6fHucqt7woqemaV7FozaRqxi-igyqwSlmE/edit?gid=1567270092#gid=1567270092"
+      >link to original {➔}</a
+    >
+    <div class="download">
+      <a href="assets/URBAN_DIGIKIT.xlsx" download="URBAN_DIGIKIT.xlsx"
+        >download {<span id="arrow_down">↓</span>}</a
+      >
+    </div>
+    <button onclick="copyToDrive()">Copy to my Drive</button>
+  </header>
+  <body>
+    <iframe
+      src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRBRkgWYzOPhtBKqfkafqaRtV_lW9IlUq7EkDlSVAE7mu1OpKRMrQ7tX0GKdQzhPNY5CCgyPKCMV070/pubhtml?widget=true&amp;headers=false"
+    ></iframe>
+
+    <script>
+      const SHEET_ID = "1UCDoY3J_L6fHucqt7woqemaV7FozaRqxi-igyqwSlmE";
+      const CLIENT_ID =
+        "74693140646-pq4sg3cq7p05cfkjbb2ogvto9japj15s.apps.googleusercontent.com";
+
+      async function copyToDrive() {
+        await new Promise((resolve) => gapi.load("client", resolve));
+        await gapi.client.init({
+          discoveryDocs: [
+            "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
+          ],
+        });
+
+        const tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: "https://www.googleapis.com/auth/drive.file",
+          callback: async (tokenResponse) => {
+            if (tokenResponse.error) return;
+
+            const res = await gapi.client.drive.files.copy({
+              fileId: SHEET_ID,
+              resource: { name: "Copy of My Sheet" },
+            });
+
+            const link = `https://docs.google.com/spreadsheets/d/${res.result.id}`;
+            window.open(link, "_blank");
+          },
+        });
+
+        tokenClient.requestAccessToken();
+      }
+    </script>
+  </body>
+</html>
