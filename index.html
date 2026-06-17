@@ -21,6 +21,7 @@
       html,
       body {
         height: 100%;
+        background-color: #d0e0e3;
       }
       iframe {
         width: 100%;
@@ -28,6 +29,8 @@
         border: none;
         display: block;
         font-family: "Montserrat", sans-serif;
+        background-color: #d0e0e3;
+
       }
       header {
         font-size: 1.2rem;
@@ -77,6 +80,8 @@
       const SHEET_ID = "1UCDoY3J_L6fHucqt7woqemaV7FozaRqxi-igyqwSlmE";
       const CLIENT_ID =
         "74693140646-pq4sg3cq7p05cfkjbb2ogvto9japj15s.apps.googleusercontent.com";
+      console.log('Sheet ID:', SHEET_ID);
+
 
       async function copyToDrive() {
         await new Promise((resolve) => gapi.load("client", resolve));
@@ -88,7 +93,7 @@
 
         const tokenClient = google.accounts.oauth2.initTokenClient({
           client_id: CLIENT_ID,
-          scope: "https://www.googleapis.com/auth/drive.file",
+          scope: "https://www.googleapis.com/auth/drive",
           callback: async (tokenResponse) => {
             if (tokenResponse.error) return;
 
